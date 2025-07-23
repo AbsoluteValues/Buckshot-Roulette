@@ -69,14 +69,14 @@ class Shotgun() :
         self.bullets = bullets[:]
         random.shuffle(self.bullets)
 
-    def fire(self) :
+    def pump(self) :
         if self.bullets[0] == "실탄" :
-            print("실탄")
+            self.bullets.pop(0)
+            return "실탄"
         else :
-            print("공포탄")
-        
-        self.bullets.pop(0)
-        
+            self.bullets.pop(0)
+            return "공포탄"
+
 class HandCuffs:             # 수갑 : 상대 턴 제약
     print("수갑")
 
