@@ -1,5 +1,13 @@
 import random
 
+class Game :
+    def __init__(self, mode) :
+        self.round = 0 # 라운드
+        self.mode = mode # 게임 모드
+    
+    def nextRound(self) :
+        self.round += 1
+
 class BulletTable() :
     def __init__(self) :
         self.bullets = [] # 총알
