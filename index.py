@@ -92,13 +92,13 @@ class HandCuffs(Item) :             # 수갑 : 상대 턴 제약
 
 class Beer(Item) :                  # 맥주 : 현재 장전된 탄약 배출
     def use(self, shotgun) :
-        if shotgun.bullets:
+        if shotgun.bullets :
             remove = shotgun.bullets.pop(0)
 
 class MagnifyingGlass(Item) :       # 돋보기 : 현재 장전된 탄약 확인
-    def use(self, shothun) :
-        if shotgun.bullets:
-            print("{shoutgun.bullets[0]}입니다.")
+    def use(self, shotgun) :
+        if shotgun.bullets :
+            print(f"{shotgun.bullets[0]}입니다.")
 
 class Cigarret(Item) :              # 담배 : 체력 1 회복
     def use(self, player) :
@@ -123,10 +123,24 @@ class Phone(Item) :                 # 대포폰 : 장전된 탄환 외 나머지
 
 class Inverter(Item) :              # 변환기 : 현재 장전된 탄약을 전환 (실탄 <-> 공포탄)
     def use(self, shoutgun) :
-        pass
+        if not shoutgun.bullets[0] :
+            return
+        before = shotgun.bullets[0]
+        if before == '실탄' :
+            shoutgun.bullets[0] = "공포탄"
+        else:
+            shoutgun.bullet[0] = "실탄"
+        print(f"변환기 사용 '{before} -> {shoutgun.bullets[0]}'")
 
-class Adrenaline(Item):            # 아드레날린 : 상대의 아이템 한개를 강탈
-    pass
+class Adrenaline(Item) :            # 아드레날린 : 상대의 아이템 한개를 강탈
+    def use(self, user, target) :
+        if not target.items :
+            return
+        
+        print("가져갈 아이템을 선택")
+        stolen = random.choice(target.items)
+        target.items.remove(stolen)
+        player.item.append(stolen)
 
 class Drug(Item):                  # 약 : 50%의 확률로 회복 or 체력 -1
     pass
