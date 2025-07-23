@@ -77,6 +77,11 @@ class Shotgun() :
             self.bullets.pop(0)
             return "공포탄"
 
+    def fire(self, target, damage) :
+        if self.bullets[0] == "실탄" :
+            target.minusHealth(damage)
+        self.pump()
+
 class HandCuffs:             # 수갑 : 상대 턴 제약
     print("수갑")
 
