@@ -1,3 +1,5 @@
+import random
+
 class BulletTable() :
     def __init__(self) :
         self.bullets = [] # 총알
