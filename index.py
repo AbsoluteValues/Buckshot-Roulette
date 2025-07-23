@@ -23,3 +23,19 @@ class BulletTable() :
                 self.blank += 1
                 self.bullets.append("공포탄")
 
+class Shotgun() :
+    def __init__(self) :
+        self.bullets = [] # 총알
+
+    def load(self, bullets) :
+        self.bullets = bullets[:]
+        random.shuffle(self.bullets)
+
+    def fire(self) :
+        if self.bullets[0] == "실탄" :
+            print("실탄")
+        else :
+            print("공포탄")
+        
+        self.bullets.pop(0)
+
