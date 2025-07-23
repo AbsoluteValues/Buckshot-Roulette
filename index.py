@@ -109,6 +109,12 @@ class Adrenaline:            # 아드레날린 : 상대의 아이템 한개를 �
 class Drug:                  # 약 : 50%의 확률로 회복 or 체력 -1
     print("약")
 
+game = Game("기본")
+game.nextRound()
+
+player = Person(2)
+dealer = Person(2)
+
 bulletTable = BulletTable()
 bulletTable.generate()
 print("테이블 ", bulletTable.bullets)
