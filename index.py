@@ -39,3 +39,13 @@ class Shotgun() :
         
         self.bullets.pop(0)
 
+bulletTable = BulletTable()
+bulletTable.generate()
+print("테이블 ", bulletTable.bullets)
+
+shotgun = Shotgun()
+shotgun.load(bulletTable.bullets)
+print("샷건 ", shotgun.bullets)
+
+for _ in range(len(shotgun.bullets)) :
+    shotgun.fire()
