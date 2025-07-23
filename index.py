@@ -8,6 +8,24 @@ class Game :
     def nextRound(self) :
         self.round += 1
 
+class Person() :
+    def __init__(self, health) :
+        self.maxHealth = health # 최대 체력
+        self.currentHealth = self.maxHealth # 현재 체력
+        self.items = [] # 가지고 있는 아이템
+        self.detain = False # 스턴 여부
+        self.aed = True # 재새동기 여부
+
+    def addHealth(self, health) :
+        if self.currentHealth + health > self.maxHealth :
+            self.currentHealth = self.maxHealth
+        else :
+            self.currentHealth += health
+
+    def minusHealth(self, health) :
+        if self.aed == True :
+            self.currentHealth -= health
+
 class BulletTable() :
     def __init__(self) :
         self.bullets = [] # 총알
