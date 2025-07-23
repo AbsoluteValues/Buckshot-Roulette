@@ -37,19 +37,29 @@ class BulletTable() :
         self.live = 0
         self.blank = 0
 
+    # 실탄이 최소 1개여야 함
+    # 총알 갯수가 짝수면 실탄과 공탄 갯수 동일
+    # 총알 갯수가 홀수면 실탄이나 공탄이 한 개 더 많음
     def generate(self) :
         self.reset()
 
         amount = random.randrange(2, 8+1)
 
-        for _ in range(amount) :
-            num = random.randrange(0, 1+1)
-            if num == 1 :
-                self.live += 1
-                self.bullets.append("실탄")
+        if amount % 2 == 0 :
+            # 짝수면 공탄 갯수 = 실탄 갯수
+            self.live = amount // 2
+            self.blank = amount // 2
+        else :
+            # 홀수면 실탄이나 공탄이 한 개 더 많음
+            if random.choice([True, False]) :
+                self.live = (amount // 2) + 1
+                self.blank = amount // 2
             else :
-                self.blank += 1
-                self.bullets.append("공포탄")
+                self.live = amount // 2
+                self.blank = (amount // 2) + 1
+
+        self.bullets = ["실탄"] * self.live + ["공포탄"] * self.blank
+        random.shuffle(self.bullets)
 
 class Shotgun() :
     def __init__(self) :
