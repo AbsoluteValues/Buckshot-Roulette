@@ -82,35 +82,56 @@ class Shotgun() :
             target.minusHealth(damage)
         self.pump()
 
-class HandCuffs:             # 수갑 : 상대 턴 제약
-    def __init__(self):
-        self.use = False
-    def use(self, enemy):
-        enemy.turnSkip = True
-        self.use = True
+class Item :                  # 상위클래스
+    def use(self) :
+        pass
 
-class Beer:                  # 맥주 : 현재 장전된 탄약 배출
+class HandCuffs(Item) :             # 수갑 : 상대 턴 제약
+    def use(self, enemy) :
+        enemy.datain = True
+
+class Beer(Item) :                  # 맥주 : 현재 장전된 탄약 배출
+    def use(self, shotgun) :
+        if shotgun.bullets:
+            remove = shotgun.bullets.pop(0)
+
+class MagnifyingGlass(Item) :       # 돋보기 : 현재 장전된 탄약 확인
+    def use(self, shothun) :
+        if shotgun.bullets:
+            print("{shoutgun.bullets[0]}입니다.")
+
+class Cigarret(Item) :              # 담배 : 체력 1 회복
+    def use(self, player) :
+        before = player.currentHealth
+        player.addHealth(1)
+        after = player.currentHealth
+        print(f"체력 {before} -> {after}")
+
+class ChainsawTino(Item) :          # 톱 : 탄환의 공격력 2배증가
+    def use(self, player) :
+        player.doubleDamage = True
+
+class Phone(Item) :                 # 대포폰 : 장전된 탄환 외 나머지 탄환중 랜덤으로 몇번째탄약이 실탄인지 알려줌
+    def use(self, shotgun) :
+        if len(shotgun.bullets) <= 1 :
+            return
+        remaining = shotgun.bullets[1:]
+        candiates = [i for i, b in enumerate(remaining) if b == "실탄"]
+        
+        if candiates :
+            idx = random.choice(candiates)
+            print(f"앞으로 {idx + 2}번째 탄약은 실탄입니다.")
+        else :
+            print("실탄 없음ㅋ")
+
+class Inverter(Item) :              # 변환기 : 현재 장전된 탄약을 전환 (실탄 <-> 공포탄)
+    def use(self, shoutgun) :
+        pass
+
+class Adrenaline(Item):            # 아드레날린 : 상대의 아이템 한개를 강탈
     pass
 
-class MagnifyingGlass:       # 돋보기 : 현재 장전된 탄약 확인
-    pass
-
-class Cigarret:              # 담배 : 체력 1 회복
-    pass
-
-class ChainsawTino:          # 톱 : 탄환의 공격력 2배증가
-    pass
-
-class Phone:                 # 대포폰 : 장전된 탄환 외 나머지 탄환중 랜덤으로 몇번째탄약이 실탄인지 알려줌
-    pass
-
-class Inverter:              # 변환기 : 현재 장전된 탄약을 전환 (실탄 <-> 공포탄)
-    pass
-
-class Adrenaline:            # 아드레날린 : 상대의 아이템 한개를 강탈
-    pass
-
-class Drug:                  # 약 : 50%의 확률로 회복 or 체력 -1
+class Drug(Item):                  # 약 : 50%의 확률로 회복 or 체력 -1
     pass
 
 game = Game("기본")
