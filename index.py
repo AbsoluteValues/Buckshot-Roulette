@@ -124,4 +124,4 @@ shotgun.load(bulletTable.bullets)
 print("샷건 ", shotgun.bullets)
 
 for _ in range(len(shotgun.bullets)) :
-    shotgun.fire()
+    shotgun.fire(player, 1)
