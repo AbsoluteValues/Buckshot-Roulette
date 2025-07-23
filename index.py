@@ -83,7 +83,11 @@ class Shotgun() :
         self.pump()
 
 class HandCuffs:             # 수갑 : 상대 턴 제약
-    print("수갑")
+    def __init__(self):
+        self.use = False
+    def use(self, enemy):
+        enemy.turnSkip = True
+        self.use = True
 
 class Beer:                  # 맥주 : 현재 장전된 탄약 배출
     print("맥주")
