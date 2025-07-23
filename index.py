@@ -111,18 +111,15 @@ class ChainsawTino(Item) :          # 톱 : 탄환의 공격력 2배증가
     def use(self, player) :
         player.doubleDamage = True
 
-class Phone(Item) :                 # 대포폰 : 장전된 탄환 외 나머지 탄환중 랜덤으로 몇번째탄약이 실탄인지 알려줌
+class Phone(Item) :                 # 대포폰 : 장전된 탄환 외 나머지 탄환중 랜덤으로 몇번째탄약이 실탄인지 공포탄인지 알려줌
     def use(self, shotgun) :
         if len(shotgun.bullets) <= 1 :
             return
         remaining = shotgun.bullets[1:]
-        candiates = [i for i, b in enumerate(remaining) if b == "실탄"]
+        idx = random.rarndrange(len(remaining))
+        bulletType = remaining[idx]
         
-        if candiates :
-            idx = random.choice(candiates)
-            print(f"앞으로 {idx + 2}번째 탄약은 실탄입니다.")
-        else :
-            print("실탄 없음ㅋ")
+        print(f"앞으로 {idx + 2}번째 탄약은 '{bulletType}'입니다.")
 
 class Inverter(Item) :              # 변환기 : 현재 장전된 탄약을 전환 (실탄 <-> 공포탄)
     def use(self, shoutgun) :
