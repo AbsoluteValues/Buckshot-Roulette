@@ -90,28 +90,28 @@ class HandCuffs:             # 수갑 : 상대 턴 제약
         self.use = True
 
 class Beer:                  # 맥주 : 현재 장전된 탄약 배출
-    print("맥주")
+    pass
 
 class MagnifyingGlass:       # 돋보기 : 현재 장전된 탄약 확인
-    print("돋보기")
+    pass
 
 class Cigarret:              # 담배 : 체력 1 회복
-    print("담배")
+    pass
 
 class ChainsawTino:          # 톱 : 탄환의 공격력 2배증가
-    print("톱")
+    pass
 
 class Phone:                 # 대포폰 : 장전된 탄환 외 나머지 탄환중 랜덤으로 몇번째탄약이 실탄인지 알려줌
-    print("폰")
+    pass
 
 class Inverter:              # 변환기 : 현재 장전된 탄약을 전환 (실탄 <-> 공포탄)
-    print("변환기")
+    pass
 
 class Adrenaline:            # 아드레날린 : 상대의 아이템 한개를 강탈
-    print("아드레날린")
+    pass
 
 class Drug:                  # 약 : 50%의 확률로 회복 or 체력 -1
-    print("약")
+    pass
 
 game = Game("기본")
 game.nextRound()
