@@ -229,19 +229,8 @@ class Drug(Item) :                  # 약 : 50%의 확률로 회복 or 체력 -1
         else :
             user.minusHealth(1)
 
+# select = input("게임 모드를 선택하시오(기본/무한) : ")
+
 game = Game("기본")
-game.nextRound()
 
-player = Person(2)
-dealer = Person(2)
-
-bulletTable = BulletTable()
-bulletTable.generate()
-print("테이블 ", bulletTable.bullets)
-
-shotgun = Shotgun()
-shotgun.load(bulletTable.bullets)
-print("샷건 ", shotgun.bullets)
-
-for _ in range(len(shotgun.bullets)) :
-    shotgun.fire(player, 1)
+game.startRound(2, 2)
