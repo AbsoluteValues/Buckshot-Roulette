@@ -226,13 +226,13 @@ class Item:
     def __init__(self, name = "아이템"):
         self.name = name
 
-    def use(self, user, target = None, context = None):
+    def use(self, user, target = None, shotgun = None):
         raise NotImplementedError()
 
     def __str__(self):
         return self.name
 
-def useItem(player, context):
+def useItem(player, dealer, shotgun) :
     if not player.items :
         print("사용 가능한 아이템이 없습니다.")
         return
@@ -266,7 +266,7 @@ class HandCuffs(Item) :
     def __init__(self) :
         super().__init__("수갑")
 
-    def use(self, user, target, context = None) :
+    def use(self, user, target, shotgun) :
         target.detain = True
 
 # 맥주 : 현재 장전된 탄약 배출
@@ -274,8 +274,7 @@ class Beer(Item) :
     def __init__(self) :
         super().__init__("맥주")
 
-    def use(self, user, target = None, context = None) :
-        shotgun = context.get("shotgun") if context else None
+    def use(self, user, target = None, shotgun = None) :
         removed = shotgun.pump()
         print(f"'{removed}' 탄약 배출됨")
 
@@ -284,8 +283,7 @@ class MagnifyingGlass(Item) :
     def __init__(self) :
         super().__init__("돋보기")
 
-    def use(self, user, target = None, context = None) :
-        shotgun = context.get("shotgun") if context else None
+    def use(self, user, target = None, shotgun = None) :
         if shotgun.bullets :
             print(f"'{shotgun.bullets[0]}'입니다.")
 
@@ -294,7 +292,7 @@ class Cigarret(Item) :
     def __init__(self) :
         super().__init__("담배")
 
-    def use(self, user, target = None, context = None) :
+    def use(self, user, target = None, shotgun = None) :
         before = user.currentHealth
         user.addHealth(1)
         print(f"체력 {before} -> {user.currentHealth}")
@@ -304,8 +302,7 @@ class ChainsawTino(Item) :
     def __init__(self) :
         super().__init__("톱")
 
-    def use(self, user, target = None, context = None) :
-        shotgun = context.get("shotgun") if context else None
+    def use(self, user, target = None, shotgun = None) :
         shotgun.sawed = True
 
 # 대포폰 : 장전된 탄환 외 나머지 탄환중 랜덤으로 몇번째탄약이 실탄인지 공포탄인지 알려줌
@@ -313,20 +310,18 @@ class Phone(Item) :
     def __init__(self) :
         super().__init__("대포폰")
 
-    def use(self, user, target = None, context = None) :
-        shotgun = context.get("shotgun") if context else None
+    def use(self, user, target = None, shotgun = None) :
         if len(shotgun.bullets) > 1 :
             remaining = shotgun.bullets[1:]
             idx = random.randrange(len(remaining))
-            print(f"{idx + 2}번째 탄은 '{remaining[idx]}")
+            print(f"{idx + 2}번째 탄은 '{remaining[idx]}'입니다")
 
 # 변환기 : 현재 장전된 탄약을 전환 (실탄 <-> 공포탄)
 class Inverter(Item) :
     def __init__(self) :
         super().__init__("변환기")
 
-    def use(self, user, target = None, context = None) :
-        shotgun = context.get("shotgun") if context else None
+    def use(self, user, target = None, shotgun = None) :
         if shotgun.bullets[0] == "실탄" :
             shotgun.bullets[0] = "공포탄"
         else :
@@ -337,7 +332,7 @@ class Adrenaline(Item) :
     def __init__(self) :
         super().__init__("아드레날린")
 
-    def use(self, user, target, context = None) :
+    def use(self, user, target, shotgun = None) :
         if not target.items :
             pass
         def onSelect(index) :
@@ -350,7 +345,7 @@ class Drug(Item) :
     def __init__(self) :
         super().__init__("약")
 
-    def use(self, user, target = None, context = None) :
+    def use(self, user, target = None, shotgun = None) :
         if random.choice([True, False]) :
             target.addHealth(1)
         else :
