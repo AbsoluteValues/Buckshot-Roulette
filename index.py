@@ -279,9 +279,11 @@ class MagnifyingGlass(Item) :
         if shotgun.bullets :
             print(f"'{shotgun.bullets[0]}'입니다.")
 
-class Cigarret(Item) :              # 담배 : 체력 1 회복
+# 담배 : 체력 1 회복
+class Cigarret(Item) :
     def __init__(self) :
         super().__init__("담배")
+
     def use(self, user, target = None, context = None) :
         before = user.currentHealth
         user.addHealth(1)
