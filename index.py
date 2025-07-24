@@ -136,6 +136,15 @@ class Person :
             else :
                 self.currentHealth -= amount
 
+    def addItem(self, amount):
+        item_classes = [
+            HandCuffs, Beer, MagnifyingGlass, Cigarret, ChainsawTino, Phone, Inverter, Adrenaline, Drug
+        ]
+        if self.game.mode == "기본":
+            item_classes = item_classes[:5]
+
+        for _ in range(amount):
+            self.items.append(random.choice(item_classes)())
 
 class BulletTable() :
     def __init__(self) :
