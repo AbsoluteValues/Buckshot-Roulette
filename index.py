@@ -6,7 +6,6 @@ class Game :
         self.round = 0 # 라운드
         self.mode = mode # 게임 모드
     
-    def nextRound(self) :
         self.round += 1
 
 class Person() :
