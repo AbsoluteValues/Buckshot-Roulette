@@ -146,7 +146,7 @@ class Person :
             else :
                 self.currentHealth -= amount
 
-    def addItem(self, amount):
+    def addItem(self, amount) :
         item_classes = [
             HandCuffs, Beer, MagnifyingGlass, Cigarret, ChainsawTino, Phone, Inverter, Adrenaline, Drug
         ]
