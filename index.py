@@ -196,11 +196,19 @@ class Shotgun() :
 
     def fire(self, target) :
         bullet = self.pump()
+
+        if self.sawed == True :
+            self.damage = 2
+        else :
+            self.damage = 1
+
         if bullet == "실탄" :
             print("탕!")
             target.minusHealth(self.damage)
+            self.damage = 1
         else :
             print("틱!")
+            self.damage = 1
         
         return bullet
 
