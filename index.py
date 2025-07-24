@@ -41,35 +41,61 @@ class Game :
 
             turn = "player"
 
-            while player.currentHealth > 0 and dealer.currentHealth > 0 and shotgun.bullets :
+            while self.player.currentHealth > 0 and self.dealer.currentHealth > 0 and shotgun.bullets :
                 if turn == "player" :
-                    choice = input("쏠 사람을 선택하시오 (you/dealer): ")
-                    if choice == "you" :
-                        result = shotgun.fire(player)
-                        if result == "실탄" :
-                            turn = "dealer"
-                        print("플레이어 ", player.currentHealth)
-                        print("딜러 ", dealer.currentHealth)
-                    else :
-                        result = shotgun.fire(dealer)
+                    if self.player.detain:
+                        print("수갑에 묶여 턴을 넘깁니다.")
+                        self.player.detain = False
                         turn = "dealer"
-                        print("플레이어 ", player.currentHealth)
-                        print("딜러 ", dealer.currentHealth)
-                else :
-                    print("<딜러> : ", end = "")
-                    if random.choice([True, False]) :
-                        print("dealer")
-                        result = shotgun.fire(dealer)
-                        if result == "실탄" :
-                            turn = "player"
-                        print("플레이어 ", player.currentHealth)
-                        print("딜러 ", dealer.currentHealth)
+                        continue
+
+                    if self.mode == "기본" and self.round != 1 :
+                        while True :
+                            use = input("아이템을 사용하시겠습니까? (y/n): ").strip().lower()
+                            if use == 'y':
+                                context = {"shotgun": shotgun, "target": self.dealer}
+                                useItem(self.player, context)
+                            else :
+                                break
+
+                    choice = input("쏠 사람을 선택하시오 (you/dealer): ").strip()
+
+                    if choice == "you" :
+                        target = self.player
                     else :
-                        print("you")
-                        result = shotgun.fire(player)
+                        target = self.dealer
+                    
+                    result = shotgun.fire(target)
+
+                    print("플레이어 ", self.player.currentHealth)
+                    print("딜러 ", self.dealer.currentHealth)
+
+                    if (target == self.dealer) or (target == self.player and result == "실탄") :
+                        turn = "dealer"
+                else :
+                    print("딜러의 선택 : ", end = "")
+                    
+                    if len(shotgun.bullets) == 1 :
+                        if shotgun.bullets[0] == "실탄" :
+                            print("player")
+                            target = self.player
+                        else :
+                            print("dealer")
+                            target = self.dealer
+                    else :
+                        target = random.choice([self.dealer, self.player])
+                        if target == self.dealer :
+                            print("dealer")
+                        else :
+                            print("player")
+                    
+                    result = shotgun.fire(target)
+
+                    print("플레이어 ", self.player.currentHealth)
+                    print("딜러 ", self.dealer.currentHealth)
+
+                    if (target == self.player) or (target == self.dealer and result == "실탄") :
                         turn = "player"
-                        print("플레이어 ", player.currentHealth)
-                        print("딜러 ", dealer.currentHealth)
 
 class Person() :
     def __init__(self, game : Game, health) :
