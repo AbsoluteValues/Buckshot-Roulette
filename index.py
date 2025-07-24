@@ -55,9 +55,10 @@ class Game :
                         print("딜러 ", dealer.currentHealth)
 
 class Person() :
-    def __init__(self, health) :
+    def __init__(self, game : Game, health) :
+        self.game = game
         self.maxHealth = health # 최대 체력
-        self.currentHealth = self.maxHealth # 현재 체력
+        self.currentHealth = health # 현재 체력
         self.items = [] # 가지고 있는 아이템
         self.detain = False # 스턴 여부
         self.aed = True # 재새동기 여부
