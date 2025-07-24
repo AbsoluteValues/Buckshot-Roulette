@@ -1,10 +1,6 @@
-
 import csv
 from tkinter import *
 from PIL import Image, ImageTk
-
-img = Image.open("./image/wallpaper.png")
-img = img.convert("RGBA")
 
 window = Tk()
 window.title("Buckshot Roulette")
@@ -31,6 +27,12 @@ board_photo = ImageTk.PhotoImage(board_image)
 board_label = Label(window, image=board_photo)
 board_label.place(x=0, y=0, relwidth=1, relheight=1)
 
+ItemBeerImg = Image.open("./image/beer.png").convert("RGBA").resize((100, 100))
+BeerImg = ImageTk.PhotoImage(ItemBeerImg)
+
+ItemBeerImg_label1 = Label(window, image = BeerImg, bd = 0)
+ItemBeerImg_label1.image = BeerImg
+ItemBeerImg_label1.pack()
 
 
 window.mainloop()
