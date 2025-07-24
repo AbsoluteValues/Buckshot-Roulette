@@ -215,11 +215,11 @@ class Shotgun() :
         if bullet == "실탄" :
             print("탕!")
             target.minusHealth(self.damage)
-            self.damage = 1
         else :
             print("틱!")
-            self.damage = 1
-        
+
+        self.sawed = False
+
         return bullet
 
 class Item:
