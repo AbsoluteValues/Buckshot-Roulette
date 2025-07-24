@@ -251,13 +251,14 @@ def useItem(player, context):
             item.use(player, game.dealer if name == "수갑" else None, context)
             del player.items[idx]
 
+# 수갑 : 상대 턴 제약
+class HandCuffs(Item) :
+    def __init__(self) :
         super().__init__("수갑")
-    def use(self, user, target, cntext = None) :
-        if target :
-            target.detain = True
-            print(f"{target}은/는 다음턴 압수")
 
-class Beer(Item) :                  # 맥주 : 현재 장전된 탄약 배출
+    def use(self, user, target, context = None) :
+        target.detain = True
+
     def __init__(self) :
         super().__init__("맥주")
     def use(self, user, target = None, context = None) :
