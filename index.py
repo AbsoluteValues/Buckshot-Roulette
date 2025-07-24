@@ -222,6 +222,35 @@ class Item:
     def __str__(self):
         return self.name
 
+def useItem(player, context):
+    if not player.items :
+        print("사용 가능한 아이템이 없습니다.")
+        return
+
+    print("사용할 아이템을 선택하세요:")
+    for i, item in enumerate(player.items) :
+        print(f"{i + 1}. {item}")
+
+    idx = int(input("번호 입력: ")) - 1
+    if 0 <= idx < len(player.items) :
+        name = player.items[idx].name
+
+        item_classes = {
+            "수갑": HandCuffs(),
+            "맥주": Beer(),
+            "돋보기": MagnifyingGlass(),
+            "담배": Cigarret(),
+            "톱": ChainsawTino(),
+            "대포폰": Phone(),
+            "변환기": Inverter(),
+            "아드레날린": Adrenaline(),
+            "상한 약": Drug()
+        }
+        item = item_classes.get(name)
+        if item :
+            item.use(player, game.dealer if name == "수갑" else None, context)
+            del player.items[idx]
+
         super().__init__("수갑")
     def use(self, user, target, cntext = None) :
         if target :
