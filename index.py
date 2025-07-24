@@ -269,12 +269,14 @@ class Beer(Item) :
         removed = shotgun.pump()
         print(f"'{removed}' 탄약 배출됨")
 
-class MagnifyingGlass(Item) :       # 돋보기 : 현재 장전된 탄약 확인
+# 돋보기 : 현재 장전된 탄약 확인
+class MagnifyingGlass(Item) :
     def __init__(self) :
         super().__init__("돋보기")
+
     def use(self, user, target = None, context = None) :
         shotgun = context.get("shotgun") if context else None
-        if shotgun and shotgun.bullets :
+        if shotgun.bullets :
             print(f"'{shotgun.bullets[0]}'입니다.")
 
 class Cigarret(Item) :              # 담배 : 체력 1 회복
