@@ -49,7 +49,7 @@ class Game :
             while self.player.currentHealth > 0 and self.dealer.currentHealth > 0 and shotgun.bullets :
                 if turn == "player" :
                     if self.player.detain:
-                        print("수갑에 묶여 턴을 넘깁니다.")
+                        print("수갑에 묶여 플레이어가 턴을 넘깁니다.")
                         self.player.detain = False
                         turn = "dealer"
                         continue
