@@ -97,7 +97,7 @@ class Game :
                     if (target == self.player) or (target == self.dealer and result == "실탄") :
                         turn = "player"
 
-class Person() :
+class Person :
     def __init__(self, game : Game, health) :
         self.game = game
         self.maxHealth = health # 최대 체력
