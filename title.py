@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import font
 from PIL import Image, ImageTk
+import subprocess 
 from font_win import add_font # font_win.py 에서 불러오기 
 
 add_font("Boucherie-Block.ttf")
@@ -33,7 +34,8 @@ canvas.create_text(640, 200, text="Buckshot Roulette", font=custom_font, fill="w
 
 #메뉴 3개 
 def start_game():
-    print("Game Start")
+    window.destroy()  # 현재 창 닫기
+    subprocess.Popen(["python", "gui.py"])
 
 def mode () :
     print("Mode")
