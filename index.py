@@ -77,6 +77,12 @@ class Game :
                     if (target == self.dealer) or (target == self.player and result == "실탄") :
                         turn = "dealer"
                 else :
+                    if self.dealer.detain :
+                        print("수갑에 묶여 딜러가 턴을 넘깁니다.")
+                        self.dealer.detain = False
+                        turn = "player"
+                        continue
+
                     print("딜러의 선택 : ", end = "")
                     
                     if len(shotgun.bullets) == 1 :
