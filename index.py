@@ -63,11 +63,13 @@ class Person() :
         self.detain = False # 스턴 여부
         self.aed = True # 재새동기 여부
 
-    def addHealth(self, health) :
-        if self.currentHealth + health > self.maxHealth :
+    def addHealth(self, amount) :
+        if self.currentHealth <= 2 :
+            pass
+        elif self.currentHealth + amount > self.maxHealth :
             self.currentHealth = self.maxHealth
         else :
-            self.currentHealth += health
+            self.currentHealth += amount
 
     def minusHealth(self, health) :
         if self.aed == True :
