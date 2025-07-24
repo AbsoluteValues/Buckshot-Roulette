@@ -131,12 +131,7 @@ class Shotgun() :
         random.shuffle(self.bullets)
 
     def pump(self) :
-        if self.bullets[0] == "실탄" :
-            self.bullets.pop(0)
-            return "실탄"
-        else :
-            self.bullets.pop(0)
-            return "공포탄"
+        return self.bullets.pop(0)
 
     def fire(self, target, damage) :
         if self.bullets[0] == "실탄" :
