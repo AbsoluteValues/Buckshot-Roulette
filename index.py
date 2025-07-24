@@ -289,12 +289,14 @@ class Cigarret(Item) :
         user.addHealth(1)
         print(f"체력 {before} -> {user.currentHealth}")
 
-class ChainsawTino(Item) :          # 톱 : 탄환의 공격력 2배증가
+# 톱 : 탄환의 공격력 2배증가
+class ChainsawTino(Item) :
     def __init__(self) :
-        super().__init__("포티노")
+        super().__init__("톱")
+
     def use(self, user, target = None, context = None) :
-        user.doubleDamage = True
-        print(f"{user}'s damage is double")
+        shotgun = context.get("shotgun") if context else None
+        shotgun.sawed = True
 
 class Phone(Item) :                 # 대포폰 : 장전된 탄환 외 나머지 탄환중 랜덤으로 몇번째탄약이 실탄인지 공포탄인지 알려줌
     def __init__(self) :
