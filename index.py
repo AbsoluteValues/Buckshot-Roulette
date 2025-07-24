@@ -58,8 +58,7 @@ class Game :
                         while True :
                             use = input("아이템을 사용하시겠습니까? (y/n): ").strip().lower()
                             if use == 'y':
-                                context = {"shotgun": shotgun, "target": self.dealer}
-                                useItem(self.player, context)
+                                useItem(self.player, self.dealer, shotgun)
                             else :
                                 break
 
