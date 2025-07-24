@@ -335,14 +335,16 @@ class Adrenaline(Item) :
             user.items.append(stolen)
             messagebox.showinfo("강탈 : ",f"{stolen.name}")
 
-class Drug(Item) :                  # 약 : 50%의 확률로 회복 or 체력 -1
+# 약 : 50%의 확률로 회복 or 체력 -1
+class Drug(Item) :
     def __init__(self) :
-        super().__init__("상한 약")
+        super().__init__("약")
+
     def use(self, user, target = None, context = None) :
         if random.choice([True, False]) :
-            user.addHealth(1)
+            target.addHealth(1)
         else :
-            user.minusHealth(1)
+            target.minusHealth(1)
 
 # select = input("게임 모드를 선택하시오(기본/무한) : ")
 
