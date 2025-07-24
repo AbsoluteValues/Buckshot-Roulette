@@ -115,19 +115,27 @@ class Person :
             self.currentHealth += amount
 
     def minusHealth(self, amount) :
+        # 기본 모드에서 3라운드 일 때 생명이 2 이하면 aed 사용 불능
         if self.game.mode == "기본" :
-            if self.currentHealth - amount >= 0 :
-                self.currentHealth -= amount
-        else :
-            if self.aed == True :
-                if self.currentHealth - amount <= 2 :
-                    print("깨진 체력 온")
+            if self.game.round == 3 :
+                if self.aed == True and self.currentHealth - amount <= 2 :
                     self.currentHealth -= amount
                     self.aed = False
+                elif self.aed == False :
+                    self.currentHealth = 0
                 else :
                     self.currentHealth -= amount
             else :
+                self.currentHealth -= amount
+        else :
+            if self.aed == True and self.currentHealth - amount <= 2 :
+                self.currentHealth -= amount
+                self.aed = False
+            elif self.aed == False :
                 self.currentHealth = 0
+            else :
+                self.currentHealth -= amount
+
 
 class BulletTable() :
     def __init__(self) :
