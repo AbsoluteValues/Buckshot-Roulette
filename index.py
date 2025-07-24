@@ -212,14 +212,16 @@ class Shotgun() :
         
         return bullet
 
-class Item :                  # 상위클래스
-    def __init__(self, name = "아이템") :
+class Item:
+    def __init__(self, name = "아이템"):
         self.name = name
-    def use(self, user, target = None, context = None) :
+
+    def use(self, user, target = None, context = None):
         raise NotImplementedError()
 
-class HandCuffs(Item) :             # 수갑 : 상대 턴 제약
-    def __init__(slef) :
+    def __str__(self):
+        return self.name
+
         super().__init__("수갑")
     def use(self, user, target, cntext = None) :
         if target :
