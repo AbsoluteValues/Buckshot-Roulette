@@ -309,17 +309,19 @@ class Phone(Item) :
             remaining = shotgun.bullets[1:]
             idx = random.randrange(len(remaining))
             print(f"{idx + 2}번째 탄은 '{remaining[idx]}")
-            
-class Inverter(Item) :              # 변환기 : 현재 장전된 탄약을 전환 (실탄 <-> 공포탄)
+
+# 변환기 : 현재 장전된 탄약을 전환 (실탄 <-> 공포탄)
+class Inverter(Item) :
     def __init__(self) :
         super().__init__("변환기")
+
     def use(self, user, target = None, context = None) :
         shotgun = context.get("shotgun") if context else None
-        if shotgun and shotgun.bullets :
-            before = shotgun.bullets[0]
-            shotgun.bullets[0] = "공포탄" if before == "실탄" else "실탄"
-            
-class Adrenaline(Item) :            # 아드레날린 : 상대의 아이템 한개를 강탈
+        if shotgun.bullets[0] == "실탄" :
+            shotgun.bullets[0] = "공포탄"
+        else :
+            shotgun.bullets[0] = "실탄"
+
     def __init__(self) :
         super().__init__("아드레날린")
     def use(self, user, target, context = None) :
