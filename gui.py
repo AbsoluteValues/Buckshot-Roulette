@@ -2,10 +2,9 @@ from tkinter import *
 from PIL import Image, ImageTk
 import random
 import gun
+import hp
 
-item_list = []  # 최대 두 개의 아이템을 저장
-item_index = 0  # 현재 소환된 아이템 인덱스 (0 또는 1)
-
+# 이미지 중앙 자르기 함수
 def crop_center(pil_img, crop_width, crop_height):
     img_width, img_height = pil_img.size
     left = max((img_width - crop_width) // 2, 0)
@@ -14,6 +13,7 @@ def crop_center(pil_img, crop_width, crop_height):
     bottom = top + crop_height
     return pil_img.crop((left, top, right, bottom))
 
+# 아이템 클래스
 class Item:
     def __init__(self, name):
         self.name = name
@@ -37,22 +37,23 @@ window.iconbitmap("./image/Buckshot_Roulette.ico")
 canvas = Canvas(window, width=1280, height=720, highlightthickness=0)
 canvas.pack(fill="both", expand=True)
 
+# 배경화면 및 게임보드 이미지 표시
 wall_photo = ImageTk.PhotoImage(Image.open("./image/wallpaper.png").convert("RGBA").resize((1280, 720)))
 canvas.create_image(0, 0, image=wall_photo, anchor="nw")
 
 board_photo = ImageTk.PhotoImage(Image.open("./image/game_board.png").convert("RGBA").resize((1280, 720)))
 canvas.create_image(0, 0, image=board_photo, anchor="nw")
 
-# ybox 이미지 준비 및 캔버스에 배치
+# ybox 이미지 준비 및 배치
 ybox_raw = Image.open("./image/ybox.png").convert("RGBA")
 ybox_cropped = crop_center(ybox_raw, 600, 600).resize((225, 225), Image.Resampling.LANCZOS)
 ybox_photo = ImageTk.PhotoImage(ybox_cropped)
 pink_box_pos = (645, 550)
 ybox_id = canvas.create_image(pink_box_pos[0], pink_box_pos[1], image=ybox_photo, anchor="center", tags="ybox")
 
-# 🟩 gun.py의 setup_shotgun 호출 시 ybox_id도 전달
 gun.setup_shotgun(canvas, window, ybox_id)
 
+# 아이템 이미지 딕셔너리
 ItemImage = {
     "수갑": ImageTk.PhotoImage(crop_center(Image.open("./image/handcuffs.png").convert("RGBA"), 400, 400)),
     "맥주": ImageTk.PhotoImage(crop_center(Image.open("./image/beer.png").convert("RGBA"), 400, 400)),
@@ -66,11 +67,21 @@ ItemImage = {
 }
 
 loaded_item_images = []
+
 current_item = None
 current_item_img = None
 current_item_canvas_id = None
 current_item_slot = None
+item_list = []
+item_index = 0
 
+# HPManager 생성 및 초기 체력 표시
+player_hp = 6
+dealer_hp = 6
+hp_manager = hp.HPManager(canvas)
+hp_manager.draw(player_hp=player_hp, dealer_hp=dealer_hp)
+
+# 아이템 소환 박스 클릭 함수
 def BoxClick(event=None):
     global current_item, current_item_img, current_item_canvas_id, current_item_slot, item_list, item_index
 
@@ -84,6 +95,7 @@ def BoxClick(event=None):
     current_item_slot = None
     item_list.append(current_item)
 
+# 인벤토리 슬롯 클릭 함수
 def SlotClick(event):
     global current_item_canvas_id, current_item_slot, current_item, item_index
 
@@ -102,6 +114,7 @@ def SlotClick(event):
             item_index += 1
             return
 
+# 인벤토리 슬롯 투명 이미지 및 클릭 영역 생성
 for idx, (x, y) in enumerate(inventory_slots):
     transparent_slot_img = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
     transparent_slot_photo = ImageTk.PhotoImage(transparent_slot_img)
@@ -109,11 +122,20 @@ for idx, (x, y) in enumerate(inventory_slots):
     slot_img_id = canvas.create_image(x, y, image=transparent_slot_photo, anchor="center", tags=f"slot_{idx}")
     canvas.tag_bind(f"slot_{idx}", "<Button-1>", SlotClick)
 
-# 핑크 박스 클릭 영역
-pink_img = Image.new("RGBA", (170, 170), (0, 0, 0, 0))
-pink_square_photo = ImageTk.PhotoImage(pink_img)
-pink_area_id = canvas.create_image(pink_box_pos[0], pink_box_pos[1], image=pink_square_photo, anchor="center", tags="pinkBoxArea")
-loaded_item_images.append(pink_square_photo)
+# 핑크 박스 클릭 감지용 투명 이미지 (ybox 위 클릭 영역 생성)
+pink_click_area = Image.new("RGBA", (170, 170), (0, 0, 0, 0))  # 완전히 투명한 이미지
+pink_click_photo = ImageTk.PhotoImage(pink_click_area)
+loaded_item_images.append(pink_click_photo)  # 참조 유지
+
+# 캔버스에 클릭 감지 이미지 올리기
+pink_area_id = canvas.create_image(
+    pink_box_pos[0], pink_box_pos[1],
+    image=pink_click_photo,
+    anchor="center",
+    tags="pinkBoxArea"
+)
+
+# 클릭 이벤트 바인딩 → 핑크 박스 클릭 시 BoxClick 함수 실행
 canvas.tag_bind("pinkBoxArea", "<Button-1>", BoxClick)
 
 window.mainloop()

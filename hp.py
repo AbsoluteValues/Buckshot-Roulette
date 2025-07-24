@@ -1,43 +1,74 @@
-# hp.py
 from PIL import Image, ImageTk
 import threading
 import time
 
-def load_heart_images():
-    hearts = [ImageTk.PhotoImage(Image.open(f"image/hp/heart{i}.png").resize((120, 120))) for i in range(1, 7)]
-    background = ImageTk.PhotoImage(Image.open("image/hp/heart_background.png").resize((140, 140)))
-    return hearts, background
+class HPManager:
+    def __init__(self, canvas):
+        self.canvas = canvas
+        self.player_hp = 6
+        self.dealer_hp = 6
+        self.hearts = []
+        self.load_images()
+        self.player_bg_id = None
+        self.player_heart_id = None
+        self.dealer_bg_id = None
+        self.dealer_heart_id = None
 
-def draw_hearts(canvas, player_hp, dealer_hp):
-    hearts, bg = load_heart_images()
+    def load_images(self):
+        self.hearts = []
+        # 체력 이미지 6단계 로드 (크기 180x180)
+        for i in range(1, 7):
+            img = Image.open(f"image/hp/heart{i}.png").resize((300, 180))
+            self.hearts.append(ImageTk.PhotoImage(img))
+        # 배경 이미지 (크기 200x200)
+        bg_img = Image.open("image/hp/heart_background.png").resize((300, 200))
+        self.background = ImageTk.PhotoImage(bg_img)
 
-    # 좌측 상단 (플레이어)
-    canvas.player_heart_bg = canvas.create_image(50, 50, image=bg, anchor="nw")
-    canvas.player_heart = canvas.create_image(60, 60, image=hearts[player_hp - 1], anchor="nw")
+    def draw(self, player_hp=None, dealer_hp=None):
+        if player_hp is not None:
+            self.player_hp = max(1, min(6, player_hp))
+        if dealer_hp is not None:
+            self.dealer_hp = max(1, min(6, dealer_hp))
 
-    # 우측 하단 (딜러)
-    canvas.dealer_heart_bg = canvas.create_image(1080, 540, image=bg, anchor="nw")
-    canvas.dealer_heart = canvas.create_image(1090, 550, image=hearts[dealer_hp - 1], anchor="nw")
+        # 플레이어 하트 (왼쪽 상단)
+        if self.player_bg_id is None:
+            self.player_bg_id = self.canvas.create_image(30, 30, image=self.background, anchor="nw")
+        else:
+            self.canvas.itemconfig(self.player_bg_id, image=self.background)
 
-    # 이미지 보존
-    canvas.hp_images = hearts
-    canvas.hp_background = bg
+        if self.player_heart_id is None:
+            self.player_heart_id = self.canvas.create_image(50, 50, image=self.hearts[self.player_hp - 1], anchor="nw")
+        else:
+            self.canvas.itemconfig(self.player_heart_id, image=self.hearts[self.player_hp - 1])
 
-def update_hp(canvas, who, hp):
-    hp = max(1, min(6, hp))  # 1~6 범위 제한
-    image = canvas.hp_images[hp - 1]
+        # 딜러 하트 (오른쪽 하단)
+        if self.dealer_bg_id is None:
+            self.dealer_bg_id = self.canvas.create_image(1080, 520, image=self.background, anchor="nw")
+        else:
+            self.canvas.itemconfig(self.dealer_bg_id, image=self.background)
 
-    if who == "player":
-        canvas.itemconfig(canvas.player_heart, image=image)
-    elif who == "dealer":
-        canvas.itemconfig(canvas.dealer_heart, image=image)
+        if self.dealer_heart_id is None:
+            self.dealer_heart_id = self.canvas.create_image(1100, 540, image=self.hearts[self.dealer_hp - 1], anchor="nw")
+        else:
+            self.canvas.itemconfig(self.dealer_heart_id, image=self.hearts[self.dealer_hp - 1])
 
-def shake_heart(canvas, who):
-    target = canvas.player_heart if who == "player" else canvas.dealer_heart
+    def update_hp(self, who, hp):
+        hp = max(1, min(6, hp))
+        if who == "player":
+            self.player_hp = hp
+            if self.player_heart_id:
+                self.canvas.itemconfig(self.player_heart_id, image=self.hearts[hp - 1])
+        elif who == "dealer":
+            self.dealer_hp = hp
+            if self.dealer_heart_id:
+                self.canvas.itemconfig(self.dealer_heart_id, image=self.hearts[hp - 1])
 
-    def animate():
-        for dx in [-5, 5, -5, 5, 0]:
-            canvas.move(target, dx, 0)
-            time.sleep(0.05)
+    def shake_heart(self, who):
+        target_id = self.player_heart_id if who == "player" else self.dealer_heart_id
 
-    threading.Thread(target=animate).start()
+        def animate():
+            for dx in [-10, 10, -10, 10, 0]:
+                self.canvas.move(target_id, dx, 0)
+                time.sleep(0.05)
+
+        threading.Thread(target=animate).start()
