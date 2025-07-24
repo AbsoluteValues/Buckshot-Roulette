@@ -298,12 +298,14 @@ class ChainsawTino(Item) :
         shotgun = context.get("shotgun") if context else None
         shotgun.sawed = True
 
-class Phone(Item) :                 # 대포폰 : 장전된 탄환 외 나머지 탄환중 랜덤으로 몇번째탄약이 실탄인지 공포탄인지 알려줌
+# 대포폰 : 장전된 탄환 외 나머지 탄환중 랜덤으로 몇번째탄약이 실탄인지 공포탄인지 알려줌
+class Phone(Item) :
     def __init__(self) :
         super().__init__("대포폰")
+
     def use(self, user, target = None, context = None) :
         shotgun = context.get("shotgun") if context else None
-        if shotgun and len(shotgun.bullets) > 1 :
+        if len(shotgun.bullets) > 1 :
             remaining = shotgun.bullets[1:]
             idx = random.randrange(len(remaining))
             print(f"{idx + 2}번째 탄은 '{remaining[idx]}")
