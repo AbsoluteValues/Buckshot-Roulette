@@ -347,9 +347,9 @@ class Drug(Item) :
 
     def use(self, user, target = None, shotgun = None) :
         if random.choice([True, False]) :
-            target.addHealth(1)
+            user.addHealth(1)
         else :
-            target.minusHealth(1)
+            user.minusHealth(1)
 
 # select = input("게임 모드를 선택하시오(기본/무한) : ")
 
