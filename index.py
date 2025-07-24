@@ -71,9 +71,20 @@ class Person() :
         else :
             self.currentHealth += amount
 
-    def minusHealth(self, health) :
-        if self.aed == True :
-            self.currentHealth -= health
+    def minusHealth(self, amount) :
+        if self.game.mode == "기본" :
+            if self.currentHealth - amount >= 0 :
+                self.currentHealth -= amount
+        else :
+            if self.aed == True :
+                if self.currentHealth - amount <= 2 :
+                    print("깨진 체력 온")
+                    self.currentHealth -= amount
+                    self.aed = False
+                else :
+                    self.currentHealth -= amount
+            else :
+                self.currentHealth = 0
 
 class BulletTable() :
     def __init__(self) :
