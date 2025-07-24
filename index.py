@@ -7,13 +7,15 @@ class Game :
     def __init__(self, mode) :
         self.round = 0 # 라운드
         self.mode = mode # 게임 모드
+        self.player = None
+        self.dealer = None
     
     def startRound(self, playerHealth, dealerHealth) :
         self.round += 1
         print("라운드 ", self.round)
 
-        player = Person(self, playerHealth)
-        dealer = Person(self, dealerHealth)
+        self.player = Person(self, playerHealth)
+        self.dealer = Person(self, dealerHealth)
 
         while player.currentHealth > 0 and dealer.currentHealth > 0 :
             bulletTable = BulletTable()
