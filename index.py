@@ -322,17 +322,18 @@ class Inverter(Item) :
         else :
             shotgun.bullets[0] = "실탄"
 
+# 아드레날린 : 상대의 아이템 한개를 강탈
+class Adrenaline(Item) :      
     def __init__(self) :
         super().__init__("아드레날린")
+
     def use(self, user, target, context = None) :
-        if not target.items :       # GUI 구현 후 메세지박스를 이용해 "상대방이 아이템을 보유하지 않음 출력"
-            return
+        if not target.items :
+            pass
         def onSelect(index) :
             stolen = target.items.pop(index)
             user.items.append(stolen)
             messagebox.showinfo("강탈 : ",f"{stolen.name}")
-            
-        #GUI구현 후 제작
 
 class Drug(Item) :                  # 약 : 50%의 확률로 회복 or 체력 -1
     def __init__(self) :
