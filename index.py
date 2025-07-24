@@ -17,6 +17,7 @@ class Game :
         self.player = Person(self, playerHealth)
         self.dealer = Person(self, dealerHealth)
 
+        # 1회 장전
         while self.player.currentHealth > 0 and self.dealer.currentHealth > 0 :
             if self.mode == "기본" :
                 if self.round == 2 :
@@ -41,6 +42,7 @@ class Game :
 
             turn = "player"
 
+            # 장전 사이클
             while self.player.currentHealth > 0 and self.dealer.currentHealth > 0 and shotgun.bullets :
                 if turn == "player" :
                     if self.player.detain:
