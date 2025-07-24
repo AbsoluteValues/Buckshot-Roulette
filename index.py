@@ -17,7 +17,20 @@ class Game :
         self.player = Person(self, playerHealth)
         self.dealer = Person(self, dealerHealth)
 
-        while player.currentHealth > 0 and dealer.currentHealth > 0 :
+        while self.player.currentHealth > 0 and self.dealer.currentHealth > 0 :
+            if self.mode == "기본" :
+                if self.round == 2 :
+                    self.player.addItem(2)
+                    self.dealer.addItem(2)
+                elif self.round == 3 :
+                    self.player.addItem(4)
+                    self.dealer.addItem(4)
+            else :
+                amount = random.randrange(1, 5+1)
+                self.player.addItem(amount)
+                amount = random.randrange(1, 5+1)
+                self.dealer.addItem(amount)
+
             bulletTable = BulletTable()
             bulletTable.generate()
             print("장전될 총알 ", bulletTable.bullets)
