@@ -246,19 +246,19 @@ def useItem(player, dealer, shotgun) :
         name = player.items[idx].name
 
         item_classes = {
-            "수갑": HandCuffs(),
-            "맥주": Beer(),
-            "돋보기": MagnifyingGlass(),
-            "담배": Cigarret(),
-            "톱": ChainsawTino(),
-            "대포폰": Phone(),
-            "변환기": Inverter(),
-            "아드레날린": Adrenaline(),
-            "상한 약": Drug()
+            "수갑": HandCuffs,
+            "맥주": Beer,
+            "돋보기": MagnifyingGlass,
+            "담배": Cigarret,
+            "톱": ChainsawTino,
+            "대포폰": Phone,
+            "변환기": Inverter,
+            "아드레날린": Adrenaline,
+            "상한 약": Drug
         }
         item = item_classes.get(name)
         if item :
-            item.use(player, game.dealer if name == "수갑" else None, context)
+            item().use(player, dealer, shotgun)
             del player.items[idx]
 
 # 수갑 : 상대 턴 제약
