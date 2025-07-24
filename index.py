@@ -6,7 +6,53 @@ class Game :
         self.round = 0 # 라운드
         self.mode = mode # 게임 모드
     
+    def startRound(self, playerHealth, dealerHealth) :
         self.round += 1
+        print("라운드 ", self.round)
+
+        player = Person(self, playerHealth)
+        dealer = Person(self, dealerHealth)
+
+        while player.currentHealth > 0 and dealer.currentHealth > 0 :
+            bulletTable = BulletTable()
+            bulletTable.generate()
+            print("장전될 총알 ", bulletTable.bullets)
+
+            shotgun = Shotgun()
+            shotgun.load(bulletTable.bullets)
+            print("랜덤으로 장전됨")
+
+            turn = "player"
+
+            while player.currentHealth > 0 and dealer.currentHealth > 0 and shotgun.bullets :
+                if turn == "player" :
+                    choice = input("쏠 사람을 선택하시오 (you/dealer): ")
+                    if choice == "you" :
+                        result = shotgun.fire(player)
+                        if result == "실탄" :
+                            turn = "dealer"
+                        print("플레이어 ", player.currentHealth)
+                        print("딜러 ", dealer.currentHealth)
+                    else :
+                        result = shotgun.fire(dealer)
+                        turn = "dealer"
+                        print("플레이어 ", player.currentHealth)
+                        print("딜러 ", dealer.currentHealth)
+                else :
+                    print("<딜러> : ", end = "")
+                    if random.choice([True, False]) :
+                        print("dealer")
+                        result = shotgun.fire(dealer)
+                        if result == "실탄" :
+                            turn = "player"
+                        print("플레이어 ", player.currentHealth)
+                        print("딜러 ", dealer.currentHealth)
+                    else :
+                        print("you")
+                        result = shotgun.fire(player)
+                        turn = "player"
+                        print("플레이어 ", player.currentHealth)
+                        print("딜러 ", dealer.currentHealth)
 
 class Person() :
     def __init__(self, health) :
