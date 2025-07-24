@@ -133,10 +133,15 @@ class Shotgun() :
     def pump(self) :
         return self.bullets.pop(0)
 
-    def fire(self, target, damage) :
-        if self.bullets[0] == "실탄" :
-            target.minusHealth(damage)
-        self.pump()
+    def fire(self, target) :
+        bullet = self.pump()
+        if bullet == "실탄" :
+            print("탕!")
+            target.minusHealth(self.damage)
+        else :
+            print("틱!")
+        
+        return bullet
 
 class Item :                  # 상위클래스
     def __init__(self, name = "아이템") :
