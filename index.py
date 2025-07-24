@@ -1,4 +1,5 @@
 import random
+from tkinter import messagebox
 
 class Game :
     def __init__(self, mode) :
@@ -83,67 +84,90 @@ class Shotgun() :
         self.pump()
 
 class Item :                  # 상위클래스
-    def use(self) :
-        pass
+    def __init__(self, name = "아이템") :
+        self.name = name
+    def use(self, user, target = None, context = None) :
+        raise NotImplementedError()
 
 class HandCuffs(Item) :             # 수갑 : 상대 턴 제약
-    def use(self, enemy) :
-        enemy.datain = True
+    def __init__(slef) :
+        super().__init__("수갑")
+    def use(self, user, target, cntext = None) :
+        if target :
+            target.detain = True
+            print(f"{target}은/는 다음턴 압수")
 
 class Beer(Item) :                  # 맥주 : 현재 장전된 탄약 배출
-    def use(self, shotgun) :
-        if shotgun.bullets :
-            remove = shotgun.bullets.pop(0)
+    def __init__(self) :
+        super().__init__("맥주")
+    def use(self, user, target = None, context = None) :
+        shotgun = context.get("shotgun") if context else None
+        remove = shotgun.bullets.pop(0)
+        print(f"'{remove}'탄약 배출")
 
 class MagnifyingGlass(Item) :       # 돋보기 : 현재 장전된 탄약 확인
-    def use(self, shotgun) :
-        if shotgun.bullets :
-            print(f"{shotgun.bullets[0]}입니다.")
+    def __init__(self) :
+        super().__init__("돋보기")
+    def use(self, user, target = None, context = None) :
+        shotgun = context.get("shotgun") if context else None
+        if shotgun and shotgun.bullets :
+            print(f"'{shotgun.bullets[0]}'입니다.")
 
 class Cigarret(Item) :              # 담배 : 체력 1 회복
-    def use(self, player) :
-        before = player.currentHealth
-        player.addHealth(1)
-        after = player.currentHealth
-        print(f"체력 {before} -> {after}")
+    def __init__(self) :
+        super().__init__("담배")
+    def use(self, user, target = None, context = None) :
+        before = user.currentHealth
+        user.addHealth(1)
+        print(f"체력 {before} -> {user.currentHealth}")
 
 class ChainsawTino(Item) :          # 톱 : 탄환의 공격력 2배증가
-    def use(self, player) :
-        player.doubleDamage = True
+    def __init__(self) :
+        super().__init__("포티노")
+    def use(self, user, target = None, context = None) :
+        user.doubleDamage = True
+        print(f"{user}'s damage is double")
 
 class Phone(Item) :                 # 대포폰 : 장전된 탄환 외 나머지 탄환중 랜덤으로 몇번째탄약이 실탄인지 공포탄인지 알려줌
-    def use(self, shotgun) :
-        if len(shotgun.bullets) <= 1 :
-            return
-        remaining = shotgun.bullets[1:]
-        idx = random.rarndrange(len(remaining))
-        bulletType = remaining[idx]
-        
-        print(f"앞으로 {idx + 2}번째 탄약은 '{bulletType}'입니다.")
-
+    def __init__(self) :
+        super().__init__("대포폰")
+    def use(self, user, target = None, context = None) :
+        shotgun = context.get("shotgun") if context else None
+        if shotgun and len(shotgun.bullets) > 1 :
+            remaining = shotgun.bullets[1:]
+            idx = random.randrange(len(remaining))
+            print(f"{idx + 2}번째 탄은 '{remaining[idx]}")
+            
 class Inverter(Item) :              # 변환기 : 현재 장전된 탄약을 전환 (실탄 <-> 공포탄)
-    def use(self, shoutgun) :
-        if not shoutgun.bullets[0] :
-            return
-        before = shotgun.bullets[0]
-        if before == '실탄' :
-            shoutgun.bullets[0] = "공포탄"
-        else:
-            shoutgun.bullet[0] = "실탄"
-        print(f"변환기 사용 '{before} -> {shoutgun.bullets[0]}'")
-
+    def __init__(self) :
+        super().__init__("변환기")
+    def use(self, user, target = None, context = None) :
+        shotgun = context.get("shotgun") if context else None
+        if shotgun and shotgun.bullets :
+            before = shotgun.bullets[0]
+            shotgun.bullets[0] = "공포탄" if before == "실탄" else "실탄"
+            
 class Adrenaline(Item) :            # 아드레날린 : 상대의 아이템 한개를 강탈
-    def use(self, user, target) :
-        if not target.items :
+    def __init__(self) :
+        super().__init__("아드레날린")
+    def use(self, user, target, context = None) :
+        if not target.items :       # GUI 구현 후 메세지박스를 이용해 "상대방이 아이템을 보유하지 않음 출력"
             return
-        
-        print("가져갈 아이템을 선택")
-        stolen = random.choice(target.items)
-        target.items.remove(stolen)
-        player.item.append(stolen)
+        def onSelect(index) :
+            stolen = target.items.pop(index)
+            user.items.append(stolen)
+            messagebox.showinfo("강탈 : ",f"{stolen.name}")
+            
+        #GUI구현 후 제작
 
-class Drug(Item):                  # 약 : 50%의 확률로 회복 or 체력 -1
-    pass
+class Drug(Item) :                  # 약 : 50%의 확률로 회복 or 체력 -1
+    def __init__(self) :
+        super().__init__("상한 약")
+    def use(self, user, target = None, context = None) :
+        if random.choice([True, False]) :
+            user.addHealth(1)
+        else :
+            user.minusHealth(1)
 
 game = Game("기본")
 game.nextRound()
