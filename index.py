@@ -40,6 +40,9 @@ class Game :
             shotgun.load(bulletTable.bullets)
             print("랜덤으로 장전됨")
 
+            self.player.detain = False
+            self.dealer.detain = False
+
             turn = "player"
 
             # 장전 사이클
