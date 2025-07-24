@@ -259,12 +259,15 @@ class HandCuffs(Item) :
     def use(self, user, target, context = None) :
         target.detain = True
 
+# 맥주 : 현재 장전된 탄약 배출
+class Beer(Item) :
     def __init__(self) :
         super().__init__("맥주")
+
     def use(self, user, target = None, context = None) :
         shotgun = context.get("shotgun") if context else None
-        remove = shotgun.bullets.pop(0)
-        print(f"'{remove}'탄약 배출")
+        removed = shotgun.pump()
+        print(f"'{removed}' 탄약 배출됨")
 
 class MagnifyingGlass(Item) :       # 돋보기 : 현재 장전된 탄약 확인
     def __init__(self) :
