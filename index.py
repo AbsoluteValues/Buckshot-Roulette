@@ -185,6 +185,7 @@ class Shotgun() :
     def __init__(self) :
         self.bullets = [] # 총알
         self.damage = 1
+        self.sawed = False
 
     def load(self, bullets) :
         self.bullets = bullets[:]
