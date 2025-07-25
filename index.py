@@ -2,6 +2,7 @@ import random
 from tkinter import*
 from tkinter import messagebox
 from PIL import Image, ImageTk
+import pymysql
 
 class Game :
     def __init__(self, mode) :
@@ -560,20 +561,45 @@ class Drug(Item) :
             user.minusHealth(1)
         print(f"체력 {before} -> {user.currentHealth}")
 
+conn = pymysql.connect(host = 'localhost', port = 3306, user = 'root', password = '1234', db = 'buckshot_roulette', charset = 'utf8')
+cursor = conn.cursor()
 
+nickname = input("닉네임을 입력하시오 : ")
 
-# select = input("게임 모드를 선택하시오(기본/무한) : ")
+sql = 'SELECT * FROM player WHERE nickname = %s'
+vals = (nickname)
+cursor.execute(sql, vals)
 
-game = Game("기본")
+row = cursor.fetchone()
+if row is None:
+    print('검색 결과 없음')
+    sql = "INSERT INTO player VALUES(%s, %d, %d)"
+    vals = (nickname, 0)
+    cursor.execute(sql, vals)
+    conn.commit()
+else:
+    print(row)
+
+select = input("게임 모드를 선택하시오(기본/무한) : ")
+
+game = Game(select)
 
 if game.mode == "무한" :
     while True :
         hp = random.randint(2, 4+1)
         game.startRound(hp, hp)
         if game.player.currentHealth == 0 :
+            sql = "UPDATE student SET death = %d WHERE nickname = %s"
+            vals = (1, nickname)
+            cursor.execute(sql, vals)
+            conn.commit()
             print("플레이어 사망. 게임 오버.")
             break
         elif game.dealer.currentHealth == 0 :
+            sql = "UPDATE student SET win = %d WHERE nickname = %s"
+            vals = (1, nickname)
+            cursor.execute(sql, vals)
+            conn.commit()
             print("딜러 사망. 계속 진행됩니다.")
 else :
     health = [2, 4, 6]
@@ -582,6 +608,14 @@ else :
         game.startRound(health[i], health[i])
         if game.player.currentHealth == 0 and game.round != 3 :
             print("<의사 : 넌 아직 죽기에는 일러!>")
+            sql = "UPDATE student SET death = %d WHERE nickname = %s"
+            vals = (1, nickname)
+            cursor.execute(sql, vals)
+            conn.commit()
             game.round -= 1
             continue
         i += 1
+        sql = "UPDATE student SET win = %d WHERE nickname = %s"
+        vals = (1, nickname)
+        cursor.execute(sql, vals)
+        conn.commit()
