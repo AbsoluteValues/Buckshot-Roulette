@@ -572,9 +572,8 @@ cursor.execute(sql, vals)
 
 row = cursor.fetchone()
 if row is None:
-    print('검색 결과 없음')
-    sql = "INSERT INTO player VALUES(%s, %d, %d)"
-    vals = (nickname, 0)
+    sql = "INSERT INTO player VALUES(%s, %s, %s)"
+    vals = (nickname, 0, 0)
     cursor.execute(sql, vals)
     conn.commit()
 else:
@@ -589,14 +588,14 @@ if game.mode == "무한" :
         hp = random.randint(2, 4+1)
         game.startRound(hp, hp)
         if game.player.currentHealth == 0 :
-            sql = "UPDATE student SET death = %d WHERE nickname = %s"
+            sql = "UPDATE player SET death = %s WHERE nickname = %s"
             vals = (1, nickname)
             cursor.execute(sql, vals)
             conn.commit()
             print("플레이어 사망. 게임 오버.")
             break
         elif game.dealer.currentHealth == 0 :
-            sql = "UPDATE student SET win = %d WHERE nickname = %s"
+            sql = "UPDATE player SET win = %s WHERE nickname = %s"
             vals = (1, nickname)
             cursor.execute(sql, vals)
             conn.commit()
@@ -608,14 +607,14 @@ else :
         game.startRound(health[i], health[i])
         if game.player.currentHealth == 0 and game.round != 3 :
             print("<의사 : 넌 아직 죽기에는 일러!>")
-            sql = "UPDATE student SET death = %d WHERE nickname = %s"
+            sql = "UPDATE player SET death = %s WHERE nickname = %s"
             vals = (1, nickname)
             cursor.execute(sql, vals)
             conn.commit()
             game.round -= 1
             continue
         i += 1
-        sql = "UPDATE student SET win = %d WHERE nickname = %s"
+        sql = "UPDATE player SET win = %s WHERE nickname = %s"
         vals = (1, nickname)
         cursor.execute(sql, vals)
         conn.commit()
