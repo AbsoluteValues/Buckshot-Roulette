@@ -464,6 +464,8 @@ class Drug(Item) :
         else :
             user.minusHealth(1)
 
+
+
 # select = input("게임 모드를 선택하시오(기본/무한) : ")
 
 game = Game("기본")
