@@ -32,6 +32,14 @@ class Game :
                 amount = random.randrange(1, 5+1)
                 self.dealer.addItem(amount)
 
+            print("<플레이어의 아이템>")
+            for i, item in enumerate(self.player.items) :
+                print(item)
+
+            print("<딜러의 아이템>")
+            for i, item in enumerate(self.dealer.items) :
+                print(item)
+
             bulletTable = BulletTable()
             bulletTable.generate()
             print("장전될 총알 ", bulletTable.bullets)
