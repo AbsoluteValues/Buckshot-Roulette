@@ -305,7 +305,8 @@ class ChainsawTino(Item) :
     def use(self, user, target = None, shotgun = None) :
         shotgun.sawed = True
 
-# 대포폰 : 장전된 탄환 외 나머지 탄환중 랜덤으로 몇번째탄약이 실탄인지 공포탄인지 알려줌
+# 대포폰 : 장전된 탄환 외 나머지 탄환중 랜덤으로 
+# 몇번째탄약이 실탄인지 공포탄인지 알려줌
 class Phone(Item) :
     def __init__(self) :
         super().__init__("대포폰")
