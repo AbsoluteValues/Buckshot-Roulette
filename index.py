@@ -306,11 +306,11 @@ class Person :
 
                 if stolen.name in ["톱", "맥주", "돋보기", "변환기", "대포폰", "상한 약", "담배"] :
                     stolen.use(self, None, shotgun)
-                    print(f"딜러가 '{stolen.name}'을 즉시 사용했습니다.")
+                    print(f"딜러가 '{stolen.name}'을 사용했습니다.")
                 elif stolen.name == "수갑" :
                     if not target.detain and self.handcuffCooldown == 0 :
                         stolen.use(self, target, shotgun)
-                        print("딜러가 '수갑'을 즉시 사용했습니다.")
+                        print("딜러가 '수갑'을 사용했습니다.")
 
                 self.items.remove(item)
                 continue
