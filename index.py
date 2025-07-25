@@ -249,10 +249,10 @@ class Person :
                     continue
 
             # 9. 상한 약: 체력 부족 시 사용 (50% 회복)
-            if name == "약" :
+            if name == "상한 약" :
                 if self.currentHealth < self.maxHealth :
                     item.use(self, None, shotgun)
-                    print("딜러가 '약'을 복용했습니다.")
+                    print("딜러가 '상한 약'을 복용했습니다.")
                     self.items.remove(item)
                     continue
 
@@ -452,12 +452,13 @@ class Adrenaline(Item) :
             user.items.append(stolen)
             messagebox.showinfo("강탈 : ",f"{stolen.name}")
 
-# 약 : 50%의 확률로 회복 or 체력 -1
+# 상한 약 : 50%의 확률로 회복 or 체력 -1
 class Drug(Item) :
     def __init__(self) :
-        super().__init__("약")
+        super().__init__("상한 약")
 
     def use(self, user, target = None, shotgun = None) :
+        before = user.currentHealth
         if random.choice([True, False]) :
             user.addHealth(1)
         else :
