@@ -91,6 +91,9 @@ class Game :
                         turn = "player"
                         continue
 
+                    if self.mode == "기본" and self.round != 1 :
+                        self.dealerUseItem(self.dealer, self.player, shotgun)
+
                     print("딜러의 선택 : ", end = "")
                     
                     if len(shotgun.bullets) == 1 :
