@@ -247,11 +247,73 @@ class Person :
 
             # 8. 아드레날린: 플레이어가 아이템을 가지고 있을 때만
             if name == "아드레날린" :
-                if target.items:
-                    item.use(self, target, shotgun)
-                    print("딜러가 '아드레날린'으로 아이템을 강탈했습니다.")
-                    self.items.remove(item)
+                candidates = [item for item in target.items if item.name != "아드레날린"]
+                if not candidates :
+                    print("딜러: 강탈할 수 있는 아이템이 없습니다.")
                     continue
+
+                # 평가 함수: 아이템별 전략적 스코어링
+                def evaluate_item_score(item):
+                    score = 0
+
+                    # 회복 방해: 플레이어 체력 낮음
+                    if target.currentHealth <= 2 and item.name in ["담배", "상한 약"]:
+                        score += 100
+
+                    # 딜러 체력 낮음: 회복용 확보
+                    if self.currentHealth < self.maxHealth and item.name in ["담배", "상한 약"]:
+                        score += 80
+
+                    # 탄환 1개: 공격 아이템 중요
+                    if len(shotgun.bullets) == 1 and item.name in ["톱", "맥주"]:
+                        score += 90
+
+                    # 탄환 여유 있음: 정보 계열 확보
+                    if len(shotgun.bullets) >= 3 and item.name in ["돋보기", "변환기", "대포폰"]:
+                        score += 70
+
+                    # 상대 아이템 많을 때 방해
+                    if len(target.items) >= 3 and item.name in ["수갑", "변환기", "톱"]:
+                        score += 60
+
+                    # 수갑은 항상 유용하지만 쿨타임 고려
+                    if item.name == "수갑":
+                        if self.handcuffCooldown == 0:
+                            score += 50
+                        else:
+                            score -= 100
+
+                    # 기본 우선순위 점수
+                    base_priority = {
+                        "톱": 50,
+                        "변환기": 45,
+                        "맥주": 40,
+                        "돋보기": 35,
+                        "대포폰": 30,
+                        "수갑": 25,
+                        "상한 약": 20,
+                        "담배": 15,
+                    }
+                    score += base_priority.get(item.name, 0)
+
+                    return score
+
+                # 점수 기반 정렬
+                scored_items = sorted(candidates, key=lambda item: evaluate_item_score(item), reverse=True)
+                stolen = scored_items[0]
+                target.items.remove(stolen)
+                print(f"딜러가 아드레날린으로 '{stolen.name}'을(를) 강탈했습니다.")
+
+                if stolen.name in ["톱", "맥주", "돋보기", "변환기", "대포폰", "상한 약", "담배"] :
+                    stolen.use(self, None, shotgun)
+                    print(f"딜러가 '{stolen.name}'을 즉시 사용했습니다.")
+                elif stolen.name == "수갑" :
+                    if not target.detain and self.handcuffCooldown == 0 :
+                        stolen.use(self, target, shotgun)
+                        print("딜러가 '수갑'을 즉시 사용했습니다.")
+
+                self.items.remove(item)
+                continue
 
             # 9. 상한 약: 체력 부족 시 사용 (50% 회복)
             if name == "상한 약" :
