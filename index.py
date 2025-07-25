@@ -395,14 +395,14 @@ class Shotgun() :
 
         return bullet
 
-class Item:
-    def __init__(self, name = "아이템"):
+class Item :
+    def __init__(self, name = "아이템") :
         self.name = name
 
-    def use(self, user, target = None, shotgun = None):
+    def use(self, user, target = None, shotgun = None) :
         raise NotImplementedError()
 
-    def __str__(self):
+    def __str__(self) :
         return self.name
 
 def useItem(player, dealer, shotgun) :
