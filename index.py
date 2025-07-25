@@ -507,17 +507,46 @@ class Inverter(Item) :
             shotgun.bullets[0] = "실탄"
 
 # 아드레날린 : 상대의 아이템 한개를 강탈
-class Adrenaline(Item) :      
+class Adrenaline(Item) :
     def __init__(self) :
         super().__init__("아드레날린")
 
-    def use(self, user, target, shotgun = None) :
-        if not target.items :
-            pass
-        def onSelect(index) :
-            stolen = target.items.pop(index)
-            user.items.append(stolen)
-            messagebox.showinfo("강탈 : ",f"{stolen.name}")
+    def use(self, user, target, shotgun=None) :
+        # 아드레날린 제외
+        candidates = [item for item in target.items if item.name != "아드레날린"]
+
+        if not candidates :
+            print("상대방에게 강탈 가능한 아이템이 없습니다.")
+            return
+
+        print("강탈 가능한 상대방의 아이템 목록:")
+        for i, item in enumerate(candidates) :
+            print(f"{i + 1}. {item}")
+
+        while True :
+            try :
+                idx = int(input("강탈할 아이템 번호를 선택하세요: ")) - 1
+                if 0 <= idx < len(candidates) :
+                    stolen = candidates[idx]
+                    target.items.remove(stolen)
+                    print(f"'{stolen.name}' 아이템을 강탈했습니다.")
+                    self.attempt_use(stolen, user, target, shotgun)
+                    break
+                else:
+                    print("올바른 번호를 입력하세요.")
+            except ValueError :
+                print("숫자를 입력하세요.")
+
+    def attempt_use(self, item, user, target, shotgun) :
+        if item.name in ["톱", "맥주", "돋보기", "변환기", "대포폰", "상한 약", "담배"] :
+            item.use(user, None, shotgun)
+            print(f"'{item.name}'을(를) 사용했습니다.")
+        elif item.name == "수갑" :
+            if not target.detain and user.handcuffCooldown == 0 :
+                item.use(user, target, shotgun)
+                print("'수갑'을 사용했습니다.")
+            else :
+                print("수갑은 현재 사용할 수 없습니다.")
 
 # 상한 약 : 50%의 확률로 회복 or 체력 -1
 class Drug(Item) :
