@@ -204,7 +204,6 @@ class Person :
                 if len(shotgun.bullets) >= 2 :
                     item.use(self, None, shotgun)
                     print("딜러가 '맥주'로 탄을 배출했습니다.")
-                    current_bullet = shotgun.bullets[0] if shotgun.bullets else None
                     self.items.remove(item)
                     continue
 
