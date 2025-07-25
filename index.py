@@ -56,6 +56,7 @@ class Game :
             # 장전 사이클
             while self.player.currentHealth > 0 and self.dealer.currentHealth > 0 and shotgun.bullets :
                 if turn == "player" :
+                    print("\n<내 턴>")
                     self.player.turnStart()
 
                     if self.player.detain:
@@ -88,6 +89,7 @@ class Game :
                         if (target == self.dealer) or (target == self.player and result == "실탄") :
                             turn = "dealer"
                 else :
+                    print("\n<딜러 턴>")
                     self.dealer.turnStart()
 
                     if self.dealer.detain :
