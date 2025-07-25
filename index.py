@@ -170,6 +170,96 @@ class Person :
         for _ in range(amount):
             self.items.append(random.choice(item_classes)())
 
+    def dealerUseItem(self, target, shotgun) :
+        if not self.items or not shotgun.bullets :
+            return
+
+        current_bullet = shotgun.bullets[0]
+        used_indices = set()
+
+        # 오래된 순서대로, 같은 시기에 들어온 아이템은 랜덤하게 섞어서 순서 결정
+        sorted_items = self.items[:]
+        random.shuffle(sorted_items)
+        for i, item in enumerate(sorted_items) :
+            name = item.name
+
+            if i in used_indices:
+                continue
+
+            # 1. 수갑: 항상 사용
+            if name == "수갑" and not target.detain :
+                item.use(self, target, shotgun)
+                print("딜러가 '수갑'을 사용했습니다.")
+                self.items.remove(item)
+                continue
+
+            # 2. 돋보기: 총알이 무엇인지 모를 경우에만 사용
+            if name == "돋보기" :
+                if current_bullet not in ["실탄", "공포탄"] :
+                    item.use(self, None, shotgun)
+                    print("딜러가 '돋보기'로 총알을 확인했습니다.")
+                    current_bullet = shotgun.bullets[0]
+                    self.items.remove(item)
+                    continue
+
+            # 3. 맥주: 현재 탄이 위험할 수 있고, 최소 2발 이상 있을 때
+            if name == "맥주" :
+                if len(shotgun.bullets) >= 2 :
+                    item.use(self, None, shotgun)
+                    print("딜러가 '맥주'로 탄을 배출했습니다.")
+                    current_bullet = shotgun.bullets[0] if shotgun.bullets else None
+                    self.items.remove(item)
+                    continue
+
+            # 4. 담배: 체력이 감소해 있으면 사용
+            if name == "담배" :
+                if self.currentHealth < self.maxHealth :
+                    item.use(self, None, shotgun)
+                    print("딜러가 '담배'를 사용했습니다.")
+                    self.items.remove(item)
+                    continue
+
+            # 5. 톱: 총알이 1발만 남았고, 그것이 실탄이거나 그럴 가능성이 높을 경우
+            if name == "톱" :
+                if len(shotgun.bullets) == 1 and current_bullet == "실탄" :
+                    item.use(self, None, shotgun)
+                    print("딜러가 '톱'을 사용했습니다.")
+                    self.items.remove(item)
+                    continue
+
+            # 6. 대포폰: 남은 탄이 많을수록 가치가 있음
+            if name == "대포폰" :
+                if len(shotgun.bullets) >= 3 :
+                    item.use(self, None, shotgun)
+                    print("딜러가 '대포폰'을 사용했습니다.")
+                    self.items.remove(item)
+                    continue
+
+            # 7. 변환기: 현재 탄이 실탄이면 공포탄으로 바꾸기
+            if name == "변환기" :
+                if current_bullet == "실탄" :
+                    item.use(self, None, shotgun)
+                    print("딜러가 '변환기'로 실탄을 공포탄으로 전환했습니다.")
+                    current_bullet = shotgun.bullets[0]
+                    self.items.remove(item)
+                    continue
+
+            # 8. 아드레날린: 플레이어가 아이템을 가지고 있을 때만
+            if name == "아드레날린" :
+                if target.items:
+                    item.use(self, target, shotgun)
+                    print("딜러가 '아드레날린'으로 아이템을 강탈했습니다.")
+                    self.items.remove(item)
+                    continue
+
+            # 9. 상한 약: 체력 부족 시 사용 (50% 회복)
+            if name == "약" :
+                if self.currentHealth < self.maxHealth :
+                    item.use(self, None, shotgun)
+                    print("딜러가 '약'을 복용했습니다.")
+                    self.items.remove(item)
+                    continue
+
     def turnStart(self):
         if self.handcuffCooldown > 0:
             self.handcuffCooldown -= 1
