@@ -348,6 +348,7 @@ def useItem(player, dealer, shotgun) :
     print("사용할 아이템을 선택하세요:")
     for i, item in enumerate(player.items) :
         print(f"{i + 1}. {item}")
+    print("0. 뒤로가기")
 
     idx = int(input("번호 입력: ")) - 1
     if 0 <= idx < len(player.items) :
