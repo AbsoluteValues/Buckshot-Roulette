@@ -62,7 +62,7 @@ class Game :
                         turn = "dealer"
                         continue
 
-                    if self.mode == "기본" and self.round != 1 :
+                    if self.mode == "무한" or (self.mode == "기본" and self.round != 1) :
                         while True :
                             use = input("아이템을 사용하시겠습니까? (y/n): ").strip().lower()
                             if use == 'y':
@@ -91,8 +91,8 @@ class Game :
                         turn = "player"
                         continue
 
-                    if self.mode == "기본" and self.round != 1 :
                         self.dealerUseItem(self.dealer, self.player, shotgun)
+                    if self.mode == "무한" or (self.mode == "기본" and self.round != 1) :
 
                     print("딜러의 선택 : ", end = "")
                     
@@ -174,17 +174,13 @@ class Person :
         if not self.items or not shotgun.bullets :
             return
 
-        current_bullet = shotgun.bullets[0]
-        used_indices = set()
+        currentBullet = ""
 
         # 오래된 순서대로, 같은 시기에 들어온 아이템은 랜덤하게 섞어서 순서 결정
         sorted_items = self.items[:]
         random.shuffle(sorted_items)
         for i, item in enumerate(sorted_items) :
             name = item.name
-
-            if i in used_indices:
-                continue
 
             # 1. 수갑: 항상 사용
             if name == "수갑" and not target.detain :
@@ -195,10 +191,10 @@ class Person :
 
             # 2. 돋보기: 총알이 무엇인지 모를 경우에만 사용
             if name == "돋보기" :
-                if current_bullet not in ["실탄", "공포탄"] :
+                if not currentBullet :
                     item.use(self, None, shotgun)
                     print("딜러가 '돋보기'로 총알을 확인했습니다.")
-                    current_bullet = shotgun.bullets[0]
+                    currentBullet = shotgun.bullets[0]
                     self.items.remove(item)
                     continue
 
@@ -221,7 +217,7 @@ class Person :
 
             # 5. 톱: 총알이 1발만 남았고, 그것이 실탄이거나 그럴 가능성이 높을 경우
             if name == "톱" :
-                if len(shotgun.bullets) == 1 and current_bullet == "실탄" :
+                if len(shotgun.bullets) == 1 and currentBullet == "실탄" :
                     item.use(self, None, shotgun)
                     print("딜러가 '톱'을 사용했습니다.")
                     self.items.remove(item)
@@ -237,10 +233,10 @@ class Person :
 
             # 7. 변환기: 현재 탄이 실탄이면 공포탄으로 바꾸기
             if name == "변환기" :
-                if current_bullet == "실탄" :
+                if currentBullet == "실탄" :
                     item.use(self, None, shotgun)
                     print("딜러가 '변환기'로 실탄을 공포탄으로 전환했습니다.")
-                    current_bullet = shotgun.bullets[0]
+                    currentBullet = shotgun.bullets[0]
                     self.items.remove(item)
                     continue
 
@@ -259,6 +255,8 @@ class Person :
                     print("딜러가 '약'을 복용했습니다.")
                     self.items.remove(item)
                     continue
+
+        return currentBullet
 
     def turnStart(self):
         if self.handcuffCooldown > 0:
