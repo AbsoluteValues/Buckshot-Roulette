@@ -152,7 +152,7 @@ class Person :
         # 기본 모드에서 3라운드 일 때 생명이 2 이하면 aed 사용 불능
         if self.game.mode == "기본" :
             if self.game.round == 3 :
-                if self.aed == True and self.currentHealth - amount <= 2 :
+                if self.aed == True and self.currentHealth - amount < 2 :
                     self.currentHealth -= amount
                     self.aed = False
                 elif self.aed == False :
@@ -588,14 +588,14 @@ if game.mode == "무한" :
     while True :
         hp = random.randint(2, 4+1)
         game.startRound(hp, hp)
-        if game.player.currentHealth == 0 :
+        if game.player.currentHealth <= 0 :
             sql = "UPDATE player SET death = %s WHERE nickname = %s"
             vals = (1, nickname)
             cursor.execute(sql, vals)
             conn.commit()
             print("플레이어 사망. 게임 오버.")
             break
-        elif game.dealer.currentHealth == 0 :
+        elif game.dealer.currentHealth <= 0 :
             sql = "UPDATE player SET win = %s WHERE nickname = %s"
             vals = (1, nickname)
             cursor.execute(sql, vals)
@@ -606,7 +606,7 @@ else :
     i = 0
     while i < 3 :
         game.startRound(health[i], health[i])
-        if game.player.currentHealth == 0 and game.round != 3 :
+        if game.player.currentHealth <= 0 and game.round != 3 :
             print("<의사 : 넌 아직 죽기에는 일러!>")
             sql = "UPDATE player SET death = %s WHERE nickname = %s"
             vals = (1, nickname)
