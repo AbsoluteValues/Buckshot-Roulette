@@ -125,7 +125,8 @@ class Person :
         self.currentHealth = health # 현재 체력
         self.items = [] # 가지고 있는 아이템
         self.detain = False # 스턴 여부
-        self.aed = True # 재새동기 여부
+        self.handcuffCooldown = 0  # 수갑 쿨타임
+        self.aed = True # 재새동기 여부(회생)
 
     def addHealth(self, amount) :
         if self.currentHealth <= 2 :
@@ -166,6 +167,10 @@ class Person :
 
         for _ in range(amount):
             self.items.append(random.choice(item_classes)())
+
+    def turnStart(self):
+        if self.handcuffCooldown > 0:
+            self.handcuffCooldown -= 1
 
 class BulletTable() :
     def __init__(self) :
@@ -272,13 +277,17 @@ def useItem(player, dealer, shotgun) :
             item().use(player, dealer, shotgun)
             del player.items[idx]
 
-# 수갑 : 상대 턴 제약
+# 수갑 : 상대 턴 제약(한 턴의 쿨타임)
 class HandCuffs(Item) :
     def __init__(self) :
         super().__init__("수갑")
 
     def use(self, user, target, shotgun) :
-        target.detain = True
+        if user.handcuffCooldown == 0:
+            target.detain = True
+            user.handcuffCooldown = 2  # 2턴 쿨타임 예시
+        else:
+            print("수갑은 아직 사용 불가합니다.")
 
 # 맥주 : 현재 장전된 탄약 배출
 class Beer(Item) :
