@@ -76,10 +76,10 @@ item_list = []
 item_index = 0
 
 # HPManager 생성 및 초기 체력 표시
-player_hp = 6
-dealer_hp = 6
-hp_manager = hp.HPManager(canvas)
-hp_manager.draw(player_hp=player_hp, dealer_hp=dealer_hp)
+#player_hp = 6
+#dealer_hp = 6
+#hp_manager = hp.HPManager(canvas)
+# hp_manager.draw(player_hp=player_hp, dealer_hp=dealer_hp)
 
 # 아이템 소환 박스 클릭 함수
 def BoxClick(event=None):
@@ -90,7 +90,8 @@ def BoxClick(event=None):
 
     current_item = random.choice(ItemPool)
     current_item_img = ItemImage[current_item.name]
-    current_item_canvas_id = canvas.create_image(pink_box_pos[0], pink_box_pos[1], image=current_item_img, anchor="center")
+    current_item_canvas_id = canvas.create_image(pink_box_pos[0], 
+        pink_box_pos[1], image=current_item_img, anchor="center")
     loaded_item_images.append(current_item_img)
     current_item_slot = None
     item_list.append(current_item)
