@@ -91,12 +91,13 @@ class Game :
                         turn = "player"
                         continue
 
-                        self.dealerUseItem(self.dealer, self.player, shotgun)
+                    currentBullet = ""
                     if self.mode == "무한" or (self.mode == "기본" and self.round != 1) :
+                        currentBullet = self.dealer.dealerUseItem(self.player, shotgun)
 
                     print("딜러의 선택 : ", end = "")
                     
-                    if len(shotgun.bullets) == 1 :
+                    if len(shotgun.bullets) == 1 or currentBullet != "" :
                         if shotgun.bullets[0] == "실탄" :
                             print("player")
                             target = self.player
