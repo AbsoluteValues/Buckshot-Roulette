@@ -141,8 +141,6 @@ class Person :
     def addHealth(self, amount) :
         if self.game.mode == "기본" and self.game.round == 3 and self.currentHealth <= 2 :
             pass
-        elif self.game.mode == "무한" and self.currentHealth <= 2 :
-            pass
         elif self.currentHealth + amount > self.maxHealth :
             self.currentHealth = self.maxHealth
         else :
