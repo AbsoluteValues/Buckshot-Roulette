@@ -463,6 +463,7 @@ class Drug(Item) :
             user.addHealth(1)
         else :
             user.minusHealth(1)
+        print(f"체력 {before} -> {user.currentHealth}")
 
 
 
