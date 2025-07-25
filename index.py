@@ -97,34 +97,35 @@ class Game :
                         self.dealer.detain = False
                         turn = "player"
                         continue
-
-                    currentBullet = ""
-                    if self.mode == "무한" or (self.mode == "기본" and self.round != 1) :
-                        currentBullet = self.dealer.dealerUseItem(self.player, shotgun)
-
-                    print("딜러의 선택 : ", end = "")
                     
-                    if len(shotgun.bullets) == 1 or currentBullet != "" :
-                        if shotgun.bullets[0] == "실탄" :
-                            print("player")
-                            target = self.player
-                        else :
-                            print("dealer")
-                            target = self.dealer
-                    else :
-                        target = random.choice([self.dealer, self.player])
-                        if target == self.dealer :
-                            print("dealer")
-                        else :
-                            print("player")
-                    
-                    result = shotgun.fire(target)
+                    if shotgun.bullets :
+                        currentBullet = ""
+                        if self.mode == "무한" or (self.mode == "기본" and self.round != 1) :
+                            currentBullet = self.dealer.dealerUseItem(self.player, shotgun)
 
-                    print("플레이어 ", self.player.currentHealth)
-                    print("딜러 ", self.dealer.currentHealth)
+                        print("딜러의 선택 : ", end = "")
+                        
+                        if len(shotgun.bullets) == 1 or currentBullet != "" :
+                            if shotgun.bullets[0] == "실탄" :
+                                print("player")
+                                target = self.player
+                            else :
+                                print("dealer")
+                                target = self.dealer
+                        else :
+                            target = random.choice([self.dealer, self.player])
+                            if target == self.dealer :
+                                print("dealer")
+                            else :
+                                print("player")
+                        
+                        result = shotgun.fire(target)
 
-                    if (target == self.player) or (target == self.dealer and result == "실탄") :
-                        turn = "player"
+                        print("플레이어 ", self.player.currentHealth)
+                        print("딜러 ", self.dealer.currentHealth)
+
+                        if (target == self.player) or (target == self.dealer and result == "실탄") :
+                            turn = "player"
 
 class Person :
     def __init__(self, game : Game, health) :
