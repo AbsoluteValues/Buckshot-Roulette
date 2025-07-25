@@ -161,13 +161,9 @@ class Person :
             else :
                 self.currentHealth -= amount
         else :
-            if self.aed == True and self.currentHealth - amount <= 2 :
-                self.currentHealth -= amount
-                self.aed = False
-            elif self.aed == False :
+            self.currentHealth -= amount
+            if self.currentHealth < 0 :
                 self.currentHealth = 0
-            else :
-                self.currentHealth -= amount
 
     def addItem(self, amount) :
         item_classes = [
