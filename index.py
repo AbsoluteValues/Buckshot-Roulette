@@ -70,20 +70,21 @@ class Game :
                             else :
                                 break
 
-                    choice = input("쏠 사람을 선택하시오 (you/dealer): ").strip()
+                    if shotgun.bullets :
+                        choice = input("쏠 사람을 선택하시오 (you/dealer): ").strip()
 
-                    if choice == "you" :
-                        target = self.player
-                    else :
-                        target = self.dealer
-                    
-                    result = shotgun.fire(target)
+                        if choice == "you" :
+                            target = self.player
+                        else :
+                            target = self.dealer
+                        
+                        result = shotgun.fire(target)
 
-                    print("플레이어 ", self.player.currentHealth)
-                    print("딜러 ", self.dealer.currentHealth)
+                        print("플레이어 ", self.player.currentHealth)
+                        print("딜러 ", self.dealer.currentHealth)
 
-                    if (target == self.dealer) or (target == self.player and result == "실탄") :
-                        turn = "dealer"
+                        if (target == self.dealer) or (target == self.player and result == "실탄") :
+                            turn = "dealer"
                 else :
                     if self.dealer.detain :
                         print("수갑에 묶여 딜러가 턴을 넘깁니다.")
