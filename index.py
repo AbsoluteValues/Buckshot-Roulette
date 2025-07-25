@@ -66,15 +66,15 @@ class Game :
                         turn = "dealer"
                         continue
 
-                    if self.mode == "무한" or (self.mode == "기본" and self.round != 1) :
-                        while True :
-                            use = input("아이템을 사용하시겠습니까? (y/n): ").strip().lower()
-                            if use == 'y':
-                                useItem(self.player, self.dealer, shotgun)
-                            else :
-                                break
-
                     if shotgun.bullets :
+                        if self.mode == "무한" or (self.mode == "기본" and self.round != 1) :
+                            while True :
+                                use = input("아이템을 사용하시겠습니까? (y/n): ").strip().lower()
+                                if use == 'y':
+                                    useItem(self.player, self.dealer, shotgun)
+                                else :
+                                    break
+
                         choice = input("쏠 사람을 선택하시오 (you/dealer): ").strip()
 
                         if choice == "you" :
