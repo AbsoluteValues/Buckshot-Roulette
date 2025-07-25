@@ -470,13 +470,22 @@ class Drug(Item) :
 
 game = Game("기본")
 
-health = [2, 4, 6]
-
-i = 0
-while i < 3 :
-    game.startRound(health[i], health[i])
-    if game.mode == "기본" and game.player.currentHealth == 0 and game.round != 3 :
-        print("<의사 : 넌 아직 죽기에는 일러!>")
-        game.round -= 1
-        continue
-    i += 1
+if game.mode == "무한" :
+    while True :
+        hp = random.randint(2, 4+1)
+        game.startRound(hp, hp)
+        if game.player.currentHealth == 0 :
+            print("플레이어 사망. 게임 오버.")
+            break
+        elif game.dealer.currentHealth == 0 :
+            print("딜러 사망. 계속 진행됩니다.")
+else :
+    health = [2, 4, 6]
+    i = 0
+    while i < 3 :
+        game.startRound(health[i], health[i])
+        if game.player.currentHealth == 0 and game.round != 3 :
+            print("<의사 : 넌 아직 죽기에는 일러!>")
+            game.round -= 1
+            continue
+        i += 1
