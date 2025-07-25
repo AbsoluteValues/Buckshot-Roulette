@@ -162,8 +162,9 @@ class Person :
             else :
                 self.currentHealth -= amount
         else :
-            self.currentHealth -= amount
-            if self.currentHealth < 0 :
+            if self.currentHealth - amount > 0 :
+                self.currentHealth -= amount
+            else :
                 self.currentHealth = 0
 
     def addItem(self, amount) :
