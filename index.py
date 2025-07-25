@@ -56,6 +56,8 @@ class Game :
             # 장전 사이클
             while self.player.currentHealth > 0 and self.dealer.currentHealth > 0 and shotgun.bullets :
                 if turn == "player" :
+                    self.player.turnStart()
+
                     if self.player.detain:
                         print("수갑에 묶여 플레이어가 턴을 넘깁니다.")
                         self.player.detain = False
@@ -86,6 +88,8 @@ class Game :
                         if (target == self.dealer) or (target == self.player and result == "실탄") :
                             turn = "dealer"
                 else :
+                    self.dealer.turnStart()
+
                     if self.dealer.detain :
                         print("수갑에 묶여 딜러가 턴을 넘깁니다.")
                         self.dealer.detain = False
@@ -377,7 +381,7 @@ class HandCuffs(Item) :
     def use(self, user, target, shotgun) :
         if user.handcuffCooldown == 0:
             target.detain = True
-            user.handcuffCooldown = 2  # 2턴 쿨타임 예시
+            user.handcuffCooldown = 2
         else:
             print("수갑은 아직 사용 불가합니다.")
 
