@@ -12,7 +12,7 @@ class Game :
     
     def startRound(self, playerHealth, dealerHealth) :
         self.round += 1
-        print("라운드 ", self.round)
+        print(f"\n[라운드 {self.round}]")
 
         self.player = Person(self, playerHealth)
         self.dealer = Person(self, dealerHealth)
