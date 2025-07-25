@@ -129,7 +129,9 @@ class Person :
         self.aed = True # 재새동기 여부(회생)
 
     def addHealth(self, amount) :
-        if self.currentHealth <= 2 :
+        if self.game.mode == "기본" and self.game.round == 3 and self.currentHealth <= 2 :
+            pass
+        elif self.game.mode == "무한" and self.currentHealth <= 2 :
             pass
         elif self.currentHealth + amount > self.maxHealth :
             self.currentHealth = self.maxHealth
